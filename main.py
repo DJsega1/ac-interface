@@ -1,19 +1,20 @@
 import sys
 
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtGui import QKeySequence, QPixmap
+from PyQt5.QtWidgets import QApplication, QMainWindow, QShortcut
 from PyQt5.uic import loadUi
 
 
 class MainWindow(QMainWindow):
     _IMAGE_SCALER = 4
+    _PRESS_W_VALUE = 1
     _commands = {
         'cameraRadio': 'rotate camera',
         'servoRadio': 'rotate servo',
         'velocityRadio': 'set velocity',
         'softRadio': 'soft turn',
         'hardRadio': 'hard turn',
-        'speedRadio': 'set speed'
+        'forwardRadio': 'go forward'
     }  # mapping radio button: command to send
 
     def __init__(self):
@@ -25,25 +26,32 @@ class MainWindow(QMainWindow):
         src = QPixmap('static/default.png')
         src = src.scaled(src.size() * self._IMAGE_SCALER)
         self.imageLabel.setPixmap(src)
-        self.imageButton.clicked.connect(self.signal_image)
-        self.sendButton.clicked.connect(self.signal_send)
-        self.stopButton.clicked.connect(self.signal_stop)
+        self.imageButton.clicked.connect(self._signal_image)
+        self.sendButton.clicked.connect(self._signal_send)
+        self.stopButton.clicked.connect(self._signal_stop)
+        self.forward = QShortcut(QKeySequence('W'), self)
+        self.forward.activated.connect(self._go_forward)
         self.setWindowTitle('Robot Control Interface')
 
-    def signal_image(self):
+    def _signal_image(self):
         src = QPixmap('static/image.jpg')
-        src = src.scaled(src.size() * 4)
+        src = src.scaled(src.size() * self._IMAGE_SCALER)
         self.imageLabel.setPixmap(src)
 
-    def signal_send(self):
+    def _signal_send(self):
         button = self.radioGroup.checkedButton()
         value = self.valueBox.value()
         if button and value:
             command = self._commands[button.objectName()]
             print(command, value)
 
-    def signal_stop(self):
+    def _signal_stop(self):
         print(3)
+
+    def _go_forward(self):
+        command = self._commands['forwardRadio']
+        value = self._PRESS_W_VALUE
+        print(command, value)
 
 
 def except_hook(cls, exception, traceback):
