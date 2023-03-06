@@ -36,12 +36,16 @@ class MainWindow(QMainWindow):
         if self.now_spin:
             self.now_spin.setEnabled(False)
         command_name = button.text()
-        spin_name = button.objectName()[:-5] + 'Box'  # [:-5] for removing 'Radio' suffix and appending 'Box' suffix
-        self.now_spin = self.findChild(QSpinBox, spin_name)  # find SpinBox by objectName
-        self.now_spin.setEnabled(True)
-        self.command_value = (command_name, self.now_spin.value())
 
-    def
+        # [:-5] for removing 'Radio' suffix and appending 'Box' suffix
+        spin_name = button.objectName()[:-5] + 'Box'
+
+        # find SpinBox by objectName
+        self.now_spin = self.findChild(QSpinBox, spin_name)
+        self.now_spin.setEnabled(True)
+
+        # TODO spinbox slots
+        self.command_value = (command_name, self.now_spin.value())
 
 
 def except_hook(cls, exception, traceback):
