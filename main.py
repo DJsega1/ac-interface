@@ -1,51 +1,49 @@
 import sys
 
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QMainWindow, QSpinBox
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.uic import loadUi
 
 
 class MainWindow(QMainWindow):
-    command_value = None
-    now_spin = None
+    _IMAGE_SCALER = 4
+    _commands = {
+        'cameraRadio': 'rotate camera',
+        'servoRadio': 'rotate servo',
+        'velocityRadio': 'set velocity',
+        'softRadio': 'soft turn',
+        'hardRadio': 'hard turn',
+        'speedRadio': 'set speed'
+    }  # mapping radio button: command to send
 
     def __init__(self):
         super().__init__()
-        loadUi('static/main.ui', self)
-        self.init_ui()
+        loadUi('static/new.ui', self)
+        self._init_ui()
 
-    def init_ui(self):
-        pic = QPixmap('static/default.png')
-        self.imageLabel.setPixmap(pic)
+    def _init_ui(self):
+        src = QPixmap('static/default.png')
+        src = src.scaled(src.size() * self._IMAGE_SCALER)
+        self.imageLabel.setPixmap(src)
         self.imageButton.clicked.connect(self.signal_image)
         self.sendButton.clicked.connect(self.signal_send)
         self.stopButton.clicked.connect(self.signal_stop)
-        self.radioGroup.buttonClicked.connect(self.radio)
+        self.setWindowTitle('Robot Control Interface')
 
     def signal_image(self):
-        print(1)
+        src = QPixmap('static/image.jpg')
+        src = src.scaled(src.size() * 4)
+        self.imageLabel.setPixmap(src)
 
     def signal_send(self):
-        if self.command_value:
-            print(self.command_value)
+        button = self.radioGroup.checkedButton()
+        value = self.valueBox.value()
+        if button and value:
+            command = self._commands[button.objectName()]
+            print(command, value)
 
     def signal_stop(self):
         print(3)
-
-    def radio(self, button):
-        if self.now_spin:
-            self.now_spin.setEnabled(False)
-        command_name = button.text()
-
-        # [:-5] for removing 'Radio' suffix and appending 'Box' suffix
-        spin_name = button.objectName()[:-5] + 'Box'
-
-        # find SpinBox by objectName
-        self.now_spin = self.findChild(QSpinBox, spin_name)
-        self.now_spin.setEnabled(True)
-
-        # TODO spinbox slots
-        self.command_value = (command_name, self.now_spin.value())
 
 
 def except_hook(cls, exception, traceback):
