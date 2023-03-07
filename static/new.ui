@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -40,10 +40,20 @@
          <property name="verticalSpacing">
           <number>20</number>
          </property>
-         <item row="0" column="0">
-          <widget class="QRadioButton" name="forwardRadio">
+         <item row="1" column="1">
+          <widget class="QRadioButton" name="hardRadio">
            <property name="text">
-            <string>Forward</string>
+            <string>Hard turn around</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">radioGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QRadioButton" name="servoRadio">
+           <property name="text">
+            <string>Servo up/down</string>
            </property>
            <attribute name="buttonGroup">
             <string notr="true">radioGroup</string>
@@ -51,9 +61,19 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QRadioButton" name="hardRadio">
+          <widget class="QRadioButton" name="backwardRadio">
            <property name="text">
-            <string>Hard turn around</string>
+            <string>Backward</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">radioGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="forwardRadio">
+           <property name="text">
+            <string>Forward</string>
            </property>
            <attribute name="buttonGroup">
             <string notr="true">radioGroup</string>
@@ -70,16 +90,6 @@
            </attribute>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QRadioButton" name="servoRadio">
-           <property name="text">
-            <string>Servo up/down</string>
-           </property>
-           <attribute name="buttonGroup">
-            <string notr="true">radioGroup</string>
-           </attribute>
-          </widget>
-         </item>
          <item row="2" column="0">
           <widget class="QRadioButton" name="velocityRadio">
            <property name="text">
@@ -90,7 +100,7 @@
            </attribute>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item row="3" column="0">
           <widget class="QRadioButton" name="cameraRadio">
            <property name="text">
             <string>Rotate camera</string>
@@ -103,9 +113,12 @@
         </layout>
        </item>
        <item>
-        <widget class="QDoubleSpinBox" name="valueBox">
+        <widget class="QSpinBox" name="valueBox">
+         <property name="minimum">
+          <number>-9999</number>
+         </property>
          <property name="maximum">
-          <double>360.000000000000000</double>
+          <number>9999</number>
          </property>
         </widget>
        </item>
