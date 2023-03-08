@@ -1,8 +1,8 @@
 import base64
-import requests
 import struct
 import sys
 
+import requests
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.uic import loadUi
@@ -11,14 +11,6 @@ from PyQt5.uic import loadUi
 class MainWindow(QMainWindow):
     _IMAGE_SCALER = 4
     _PRESS_W_VALUE = 1
-    _commands = {
-        'cameraRadio': 'asddasadsadsdas',
-        'servoRadio': 'rotate servo',
-        'velocityRadio': 'set velocity',
-        'softRadio': 'soft turn',
-        'hardRadio': 'hard turn',
-        'forwardRadio': (0x01, 'value', 'value'),
-    }  # mapping radio button: command to send
 
     def __init__(self):
         super().__init__()
@@ -62,11 +54,11 @@ class MainWindow(QMainWindow):
             data = base64.b64encode(
                 struct.pack('>3B', 5, 0,  value)
             )
-        elif button == 'cameraRadio' and value:
+        elif button == 'cameraRadio':
             data = base64.b64encode(
                 struct.pack('>3B', 6, value,  0)
             )
-        elif button == 'servoRadio' and value:
+        elif button == 'servoRadio':
             data = base64.b64encode(
                 struct.pack('>3B', 7, value,  0)
             )
