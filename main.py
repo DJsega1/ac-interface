@@ -33,35 +33,52 @@ class MainWindow(QMainWindow):
 
     def _signal_send(self):
         button = self.radioGroup.checkedButton().objectName()
-        value = self.valueBox.value()
-        if button == 'forwardRadio' and value:
-            data = base64.b64encode(
-                struct.pack('>3B', 1, min(value, 255),  max(0, value - 255))
-            )
-        elif button == 'backwardRadio' and value:
-            data = base64.b64encode(
-                struct.pack('>3B', 2, min(value, 255),  max(0, value - 255))
-            )
-        elif button == 'hardRadio' and value:
-            data = base64.b64encode(
-                struct.pack('>3B', 3, abs(value),  value // abs(value))
-            )
-        elif button == 'softRadio' and value:
-            data = base64.b64encode(
-                struct.pack('>3B', 4, abs(value),  value // abs(value))
-            )
-        elif button == 'velocityRadio' and value:
-            data = base64.b64encode(
-                struct.pack('>3B', 5, 0,  value)
-            )
-        elif button == 'cameraRadio':
-            data = base64.b64encode(
-                struct.pack('>3B', 6, value,  0)
-            )
-        elif button == 'servoRadio':
-            data = base64.b64encode(
-                struct.pack('>3B', 7, value,  0)
-            )
+        if button == 'stringHcRadio':
+            value = bytearray.fromhex(self.stringEdit.text())
+            data = struct.pack('>3B', 9, 0, 0)
+            for i in range(len(value) // 2):
+                data += struct.pack(
+                    '>3B', 10, value[i * 2], value[i * 2 + 1]
+                )
+            if len(value) % 2 == 1:
+                data += struct.pack('>3B', 10, value[-1], 0)
+            else:
+                data += struct.pack('>3B', 10, 0, 0)
+            data = base64.b64encode(data)
+        else:
+            value = self.valueBox.value()
+            if button == 'forwardRadio' and value:
+                data = base64.b64encode(
+                    struct.pack(
+                        '>3B', 1, min(value, 255),  max(0, value - 255)
+                    )
+                )
+            elif button == 'backwardRadio' and value:
+                data = base64.b64encode(
+                    struct.pack(
+                        '>3B', 2, min(value, 255),  max(0, value - 255)
+                    )
+                )
+            elif button == 'hardRadio' and value:
+                data = base64.b64encode(
+                    struct.pack('>3B', 3, abs(value),  value // abs(value))
+                )
+            elif button == 'softRadio' and value:
+                data = base64.b64encode(
+                    struct.pack('>3B', 4, abs(value),  value // abs(value))
+                )
+            elif button == 'velocityRadio' and value:
+                data = base64.b64encode(
+                    struct.pack('>3B', 5, 0,  value)
+                )
+            elif button == 'cameraRadio':
+                data = base64.b64encode(
+                    struct.pack('>3B', 6, value,  0)
+                )
+            elif button == 'servoRadio':
+                data = base64.b64encode(
+                    struct.pack('>3B', 7, value,  0)
+                )
         requests.get('http://10.8.0.3:8080/send_command', params={'cmd': data})
 
     def _signal_stop(self):

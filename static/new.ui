@@ -19,7 +19,7 @@
      <rect>
       <x>20</x>
       <y>20</y>
-      <width>879</width>
+      <width>885</width>
       <height>513</height>
      </rect>
     </property>
@@ -121,6 +121,32 @@
           <number>9999</number>
          </property>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="stringHcRadio">
+         <property name="text">
+          <string>Send HC-12 string</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">radioGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="stringEdit"/>
        </item>
        <item>
         <spacer name="verticalSpacer">
