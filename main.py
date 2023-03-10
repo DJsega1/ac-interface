@@ -60,12 +60,14 @@ class MainWindow(QMainWindow):
                     )
                 )
             elif button == 'hardRadio' and value:
+                vector = 0 if value < 0 else 1
                 data = base64.b64encode(
-                    struct.pack('>3B', 3, abs(value),  value // abs(value))
+                    struct.pack('>3B', 3, abs(value),  vector)
                 )
             elif button == 'softRadio' and value:
+                vector = 0 if value < 0 else 1
                 data = base64.b64encode(
-                    struct.pack('>3B', 4, abs(value),  value // abs(value))
+                    struct.pack('>3B', 4, abs(value),  vector)
                 )
             elif button == 'velocityRadio' and value:
                 data = base64.b64encode(
@@ -82,7 +84,10 @@ class MainWindow(QMainWindow):
         requests.get('http://10.8.0.3:8080/send_command', params={'cmd': data})
 
     def _signal_stop(self):
-        print(3)
+        data = base64.b64encode(
+                struct.pack('>3B', 255, 255, 255)
+            )
+        requests.get('http://10.8.0.3:8080/send_command', params={'cmd': data})
 
 
 def except_hook(cls, exception, traceback):
